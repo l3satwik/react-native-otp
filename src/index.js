@@ -13,7 +13,9 @@ class OTPInput extends Component {
     containerStyle: PropTypes.object,
     cellStyle: PropTypes.object,
     defaultValue: PropTypes.string,
-    editable: PropTypes.bool
+    editable: PropTypes.bool,
+    cellParentStyle: PropTypes.object,
+    showCellParentBorderColor: PropTypes.bool
   }
 
   static defaultProps = {
@@ -78,6 +80,8 @@ class OTPInput extends Component {
       tintColor,
       offTintColor,
       otpLength,
+      cellParentStyle,
+      showCellParentBorderColor,
       ...otherProps
     } = this.props;
 
@@ -100,20 +104,24 @@ class OTPInput extends Component {
             {Array(otpLength)
               .fill()
               .map((_, index) => (
-                <Text
+                <View
                   key={index}
                   style={[
-                    styles.cell,
-                    cellStyle,
-                    {
-                      borderColor:
-                      internalVal && index === internalVal.length ? tintColor : offTintColor
-                    }
+                    cellParentStyle,
+                    showCellParentBorderColor && { borderColor: index === (internalVal && internalVal.length || 0) ? tintColor : offTintColor }
                   ]}
-                  onPress={() => this.textInput.focus()}
                 >
-                  {internalVal && internalVal.length > index ? internalVal[index] : " "}
-                </Text>
+                  <Text
+                    style={[
+                      styles.cell,
+                      cellStyle,
+                      { borderColor: index === (internalVal && internalVal.length || 0) ? tintColor : offTintColor }
+                    ]}
+                    onPress={() => this.textInput.focus()}
+                  >
+                    {internalVal && internalVal.length > index ? internalVal[index] : " "}
+                  </Text>
+                </View>
               ))}
         </View>
       </View>
